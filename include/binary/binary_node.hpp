@@ -5,7 +5,7 @@ class BinaryNode {
     public:
     // Constructor
     BinaryNode(int val): val(val){};
-    BinaryNode(int val, BinaryNode *parent): val(val), parent(parent){};
+    BinaryNode(int val, BinaryNode *parent_val): val(val), parent(parent_val){};
 
     //
     int val;
