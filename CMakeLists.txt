@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(
-    Trees
+project(Trees
     DESCRIPTION "Tree Data Structures"
-    LANGAUGES CXX
+    LANGUAGES C CXX
 )
 
 include(FetchContent)
