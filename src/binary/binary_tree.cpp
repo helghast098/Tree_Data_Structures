@@ -1,6 +1,7 @@
 #include "binary/binary_tree.hpp"
 #include <queue>
 #include <sstream>
+
 // Constructor
 BinaryTree::BinaryTree(  std::string const &node_data_str ) {
     BinaryNode *head = nullptr;
@@ -53,4 +54,29 @@ BinaryTree::BinaryTree(  std::string const &node_data_str ) {
         }
     }
     this->head = head;
+}
+
+// Deconstructor
+BinaryTree::~BinaryTree() {
+    this->clear();
+}
+
+// methods
+
+void clear_help( BinaryNode *node ) {
+    if ( node == nullptr ) {
+        return;
+    }
+
+    clear_help( node->left_child );
+    clear_help( node->right_child );
+
+    node->left_child = nullptr;
+    node->right_child = nullptr;
+    delete node;
+}
+
+void BinaryTree::clear() {
+    clear_help( this->head );
+    this->head = nullptr;
 }
