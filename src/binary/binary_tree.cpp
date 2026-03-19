@@ -60,7 +60,6 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
     while ( node_start < node_data_str.length() ) {
         if ( !is_head_processed ) {
             head = new BinaryNode(0);
-            is_head_processed = true;
             node_queue.push( head );
         }
 
@@ -73,34 +72,47 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
             node_start = node_data_str.length();
         }
         else {
+            if ( node_start == node_end ) {
+                if ( node_queue.empty() ) {
+                    throw TreeException( "String initializer has bad form - BinaryTree Constructor" );
+                }
+                node_queue.pop();
+                node_start = node_end + 1;
+                continue;
+            }
             node_data.str( node_data_str.substr( node_start, node_end - node_start ) );
             node_start = node_end + 1;
         }
         node_data.clear();
 
         // parsing values from nodes substring
-        std::string node_val;
-        int node_should_set = 0; // identifies which node value should be set: 0 (parent),  1 (left child), 2 (right child)
 
         if ( node_queue.empty() ) {
-            throw TreeException("string initializer for Tree has bad form. Please see test cases for example format");
+            throw TreeException("String initializer has bad form - BinaryTree Constructor");
         }
         BinaryNode *node = node_queue.front();
         node_queue.pop();
-        while ( std::getline( node_data, node_val, ' ') ) {
 
-            if ( node_should_set == 0 ) {
-                node->val = std::stoi( node_val ); // redundant, but helpful when debugging
+        std::string node_val;
+        int should_set_left = true; // setting up left child first
+
+        while ( std::getline( node_data, node_val, ' ') ) {
+            // setting head value
+            if ( !is_head_processed ) {
+                node->val = std::stoi( node_val );
+                is_head_processed = true;
+                continue;
             }
-            else if ( node_should_set == 1 ) {
+
+            if ( should_set_left ) {
                 node->left_child = new BinaryNode( std::stoi( node_val ), node );
                 node_queue.push( node->left_child );
+                should_set_left = false;
             }
             else {
                 node->right_child = new BinaryNode( std::stoi( node_val ), node );
                 node_queue.push( node->right_child );
             }
-            ++node_should_set;
         }
     }
     this->head = head;
