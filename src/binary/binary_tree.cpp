@@ -16,6 +16,48 @@ class TreeException: public std::exception {
 };
 
 // helper functions
+
+// constructor
+void populate_node( std::stringstream &nodes_val_str, std::queue<BinaryNode *>& q, bool is_head_processed, const BinaryNode *head) {
+    if ( q.empty() ) {
+        throw TreeException("BinaryTree::BinaryTree - No node found for entry");
+    }
+
+    BinaryNode *node = q.front();
+    q.pop();
+
+    std::string node_val;
+    int node_to_set = 0; // setting up left child first
+
+    while ( std::getline( nodes_val_str, node_val, ' ') ) {
+        // setting head value
+        if ( !is_head_processed ) {
+            node->val = std::stoi( node_val );
+            is_head_processed = true;
+            ++node_to_set;
+            continue;
+        }
+
+        // left child
+        if ( node_to_set == 1 ) {
+            node->left_child = new BinaryNode( std::stoi( node_val ), node );
+            q.push( node->left_child );
+        }
+        // right child
+        else if ( node_to_set == 2 ) {
+            node->right_child = new BinaryNode( std::stoi( node_val ), node );
+            q.push( node->right_child );
+        }
+        else {
+            if ( node == head ) {
+                throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 3 values in first node");
+            }
+            throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 2 values between , ,");
+        }
+        ++node_to_set;
+    }
+}
+
 void clear_help( BinaryNode *node ) {
     if ( node == nullptr ) {
         return;
@@ -63,7 +105,7 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
             node_queue.push( head );
         }
 
-        // getting nodes substring
+        // parsing string for node values
         size_t node_end = node_data_str.find( ',', node_start );
         std::stringstream node_data;
 
@@ -71,49 +113,21 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
             node_data.str( node_data_str.substr( node_start, node_data_str.length() - node_start ) );
             node_start = node_data_str.length();
         }
-        else {
-            if ( node_start == node_end ) {
-                if ( node_queue.empty() ) {
-                    throw TreeException( "String initializer has bad form - BinaryTree Constructor" );
-                }
-                node_queue.pop();
-                node_start = node_end + 1;
-                continue;
+        else if ( node_start == node_end ) {
+            if ( node_queue.empty() ) {
+                throw TreeException( "BinaryTree::BinaryTree - no node found for empty entry " );
             }
+            node_queue.pop();
+            node_start = node_end + 1;
+            continue;
+        }
+        else {
             node_data.str( node_data_str.substr( node_start, node_end - node_start ) );
             node_start = node_end + 1;
         }
-        node_data.clear();
 
-        // parsing values from nodes substring
-
-        if ( node_queue.empty() ) {
-            throw TreeException("String initializer has bad form - BinaryTree Constructor");
-        }
-        BinaryNode *node = node_queue.front();
-        node_queue.pop();
-
-        std::string node_val;
-        int should_set_left = true; // setting up left child first
-
-        while ( std::getline( node_data, node_val, ' ') ) {
-            // setting head value
-            if ( !is_head_processed ) {
-                node->val = std::stoi( node_val );
-                is_head_processed = true;
-                continue;
-            }
-
-            if ( should_set_left ) {
-                node->left_child = new BinaryNode( std::stoi( node_val ), node );
-                node_queue.push( node->left_child );
-                should_set_left = false;
-            }
-            else {
-                node->right_child = new BinaryNode( std::stoi( node_val ), node );
-                node_queue.push( node->right_child );
-            }
-        }
+        // setup up node with children
+        populate_node( node_data, node_queue, is_head_processed, head );
     }
     this->head = head;
 }
@@ -122,8 +136,6 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
 BinaryTree::~BinaryTree() {
     this->clear();
 }
-
-// methods
 
 void BinaryTree::clear() {
     clear_help( this->head );

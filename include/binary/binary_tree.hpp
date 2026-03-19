@@ -18,7 +18,6 @@ class BinaryTree {
 
     private:
         BinaryNode *head = nullptr;
-
 };
 
 #endif
