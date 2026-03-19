@@ -18,7 +18,7 @@ class TreeException: public std::exception {
 // helper functions
 
 // constructor
-void populate_node( std::stringstream &nodes_val_str, std::queue<BinaryNode *>& q, bool is_head_processed, const BinaryNode *head) {
+void populate_node( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& q, bool& is_head_processed, const BinaryNode *head) {
     if ( q.empty() ) {
         throw TreeException("BinaryTree::BinaryTree - No node found for entry");
     }
@@ -34,25 +34,24 @@ void populate_node( std::stringstream &nodes_val_str, std::queue<BinaryNode *>& 
         if ( !is_head_processed ) {
             node->val = std::stoi( node_val );
             is_head_processed = true;
-            ++node_to_set;
             continue;
         }
 
         // left child
-        if ( node_to_set == 1 ) {
+        if ( node_to_set == 0 ) {
             node->left_child = new BinaryNode( std::stoi( node_val ), node );
             q.push( node->left_child );
         }
         // right child
-        else if ( node_to_set == 2 ) {
+        else if ( node_to_set == 1 ) {
             node->right_child = new BinaryNode( std::stoi( node_val ), node );
             q.push( node->right_child );
         }
         else {
             if ( node == head ) {
-                throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 3 values in first node");
+                throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 3 values in first parse");
             }
-            throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 2 values between , ,");
+            throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 2 values between , , after first parse");
         }
         ++node_to_set;
     }
