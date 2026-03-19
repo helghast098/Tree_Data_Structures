@@ -132,7 +132,6 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
 // deconstructor
 BinaryTree::~BinaryTree() {
     this->clear();
-    this->head = nullptr;
 }
 
 void BinaryTree::clear() {
