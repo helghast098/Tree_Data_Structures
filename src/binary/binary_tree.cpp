@@ -85,9 +85,6 @@ bool full_binary_help( const BinaryNode *node ) {
     }
 
     return full_binary_help( node->left_child ) && full_binary_help( node->right_child );
-
-
-
 }
 
 // constructor
@@ -135,6 +132,7 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
 // deconstructor
 BinaryTree::~BinaryTree() {
     this->clear();
+    this->head = nullptr;
 }
 
 void BinaryTree::clear() {
