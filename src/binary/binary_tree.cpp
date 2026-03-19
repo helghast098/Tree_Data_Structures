@@ -1,7 +1,9 @@
 #include "binary/binary_tree.hpp"
 #include <queue>
+#include <unordered_map>
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 class TreeException: public std::exception {
     private:
@@ -140,4 +142,24 @@ void BinaryTree::clear() {
 
 bool BinaryTree::is_full_binary() {
     return full_binary_help( this->head );
+}
+
+
+int helper_balanced( BinaryNode * node) {
+    if ( node == nullptr ) {
+        return 0;
+    }
+
+    int left_height = helper_balanced( node->left_child );
+    int right_height = helper_balanced( node->right_child );
+
+    if ( left_height == -1 || right_height == -1 || abs( left_height - right_height ) > 1 ) {
+        return -1;
+    }
+
+    return std::max( 1 + left_height, 1 + right_height );
+}
+
+bool BinaryTree::is_balanced() {
+    return helper_balanced( this->head ) != -1;
 }

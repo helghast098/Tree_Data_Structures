@@ -13,8 +13,9 @@ class BinaryTree {
         ~BinaryTree();
 
         // methods
-        bool is_full_binary(); // checks if the graph is full binary
         void clear();  // clears the graph
+        bool is_full_binary(); // checks if the graph is full binary
+        bool is_balanced(); // checks if the grap is balanced
 
     private:
         BinaryNode *head = nullptr;
