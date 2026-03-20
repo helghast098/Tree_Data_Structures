@@ -42,8 +42,8 @@ bool data_parser( const std::string &s,  int &test_case, int &expected_result, s
 }
 
 
-TEST(BinaryTree, FullBinary) {
-    std::ifstream input(data_dir + "/test_data.txt");
+TEST(BinaryTree, IsFullBinary) {
+    std::ifstream input(data_dir + "/full_binary.txt");
     ASSERT_TRUE( input.good() ) << strerror( errno );
     std::string line;
 
@@ -57,8 +57,39 @@ TEST(BinaryTree, FullBinary) {
 
         BinaryTree tree( nodes_str );
 
-        ASSERT_EQ( expected_result, tree.is_full_binary() );
+        bool got = tree.is_full_binary();
+        std::cerr << "Got: " << got << std::endl;
+
+        ASSERT_EQ( expected_result, got );
         nodes_str = "";
+
+        std::cerr << "\n\n";
+    }
+    input.close();
+}
+
+TEST(BinaryTree, IsBalanced) {
+    std::ifstream input(data_dir + "/balanced.txt");
+    ASSERT_TRUE( input.good() ) << strerror( errno );
+    std::string line;
+
+    int test_case = 0;
+    int expected_result = 0;
+    std::string nodes_str;
+    while(std::getline(input, line)) {
+        if ( !data_parser( line, test_case, expected_result, nodes_str ) ) {
+            continue;
+        }
+
+        BinaryTree tree( nodes_str );
+
+        bool got = tree.is_balanced();
+        std::cerr << "Got: " << got << std::endl;
+
+        ASSERT_EQ( expected_result, got );
+        nodes_str = "";
+
+        std::cerr << "\n\n";
     }
     input.close();
 }
