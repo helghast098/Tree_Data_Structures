@@ -113,7 +113,8 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
         }
         else if ( node_start == node_end ) {
             if ( node_queue.empty() ) {
-                throw TreeException( "BinaryTree::BinaryTree - no node found for empty entry " );
+                //throw TreeException( "BinaryTree::BinaryTree - no node found for empty entry " );
+                break; // will break early. All other nodes will be ignores and converted to leaf nodes
             }
             node_queue.pop();
             node_start = node_end + 1;
