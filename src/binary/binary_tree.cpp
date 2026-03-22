@@ -88,6 +88,22 @@ bool full_binary_help( const BinaryNode *node ) {
     return full_binary_help( node->left_child ) && full_binary_help( node->right_child );
 }
 
+int helper_balanced( BinaryNode * node) {
+    if ( node == nullptr ) {
+        return 0;
+    }
+
+    int left_height = helper_balanced( node->left_child );
+    int right_height = helper_balanced( node->right_child );
+
+    if ( left_height == -1 || right_height == -1 || abs( left_height - right_height ) > 1 ) {
+        return -1;
+    }
+
+    return std::max( 1 + left_height, 1 + right_height );
+}
+
+
 // constructor
 BinaryTree::BinaryTree( const std::string &node_data_str ) {
     BinaryNode *head = nullptr;
@@ -136,6 +152,32 @@ BinaryTree::~BinaryTree() {
     this->clear();
 }
 
+void CopyTree( BinaryNode *copy, BinaryNode *original ) {
+    if ( original == nullptr || copy == nullptr) {
+        return;
+    }
+    
+    if ( original->left_child != nullptr  ) {
+        copy->left_child = new BinaryNode( original->left_child->val );
+        CopyTree( copy->left_child, original->left_child );
+    }
+
+    if ( original->right_child != nullptr  ) {
+        copy->right_child = new BinaryNode( original->right_child->val );
+        CopyTree( copy->right_child, original->right_child );
+    }
+}
+
+// function overload
+const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
+    this->clear();
+    if ( this->head != nullptr ) {
+        head = new BinaryNode(0);
+    }
+    CopyTree( this->head, rhs.head );
+    return *this;
+}
+
 void BinaryTree::clear() {
     clear_help( this->head );
     this->head = nullptr;
@@ -143,22 +185,6 @@ void BinaryTree::clear() {
 
 bool BinaryTree::is_full_binary() {
     return full_binary_help( this->head );
-}
-
-
-int helper_balanced( BinaryNode * node) {
-    if ( node == nullptr ) {
-        return 0;
-    }
-
-    int left_height = helper_balanced( node->left_child );
-    int right_height = helper_balanced( node->right_child );
-
-    if ( left_height == -1 || right_height == -1 || abs( left_height - right_height ) > 1 ) {
-        return -1;
-    }
-
-    return std::max( 1 + left_height, 1 + right_height );
 }
 
 bool BinaryTree::is_balanced() {

@@ -16,7 +16,7 @@ class BinaryTree {
         void clear();  // clears the graph
         bool is_full_binary(); // checks if the graph is full binary
         bool is_balanced(); // checks if the grap is balanced
-
+        const BinaryTree& operator=( const BinaryTree& rhs );
     private:
         BinaryNode *head = nullptr;
 };
