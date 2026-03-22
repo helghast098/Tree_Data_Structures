@@ -20,7 +20,7 @@ class TreeException: public std::exception {
 // helper functions
 
 // constructor
-void populate_node( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& q, bool& is_head_processed, const BinaryNode *head) {
+void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& q, bool& is_head_processed, const BinaryNode *head) {
     if ( q.empty() ) {
         throw TreeException("BinaryTree::BinaryTree - No node found for entry");
     }
@@ -59,6 +59,22 @@ void populate_node( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& 
     }
 }
 
+void copy_tree_help( BinaryNode *copy, BinaryNode *original ) {
+    if ( original == nullptr || copy == nullptr) {
+        return;
+    }
+    
+    if ( original->left_child != nullptr  ) {
+        copy->left_child = new BinaryNode( original->left_child->val );
+        copy_tree_help( copy->left_child, original->left_child );
+    }
+
+    if ( original->right_child != nullptr  ) {
+        copy->right_child = new BinaryNode( original->right_child->val );
+        copy_tree_help( copy->right_child, original->right_child );
+    }
+}
+
 void clear_help( BinaryNode *node ) {
     if ( node == nullptr ) {
         return;
@@ -88,13 +104,13 @@ bool full_binary_help( const BinaryNode *node ) {
     return full_binary_help( node->left_child ) && full_binary_help( node->right_child );
 }
 
-int helper_balanced( BinaryNode * node) {
+int balanced_helper( BinaryNode * node) {
     if ( node == nullptr ) {
         return 0;
     }
 
-    int left_height = helper_balanced( node->left_child );
-    int right_height = helper_balanced( node->right_child );
+    int left_height = balanced_helper( node->left_child );
+    int right_height = balanced_helper( node->right_child );
 
     if ( left_height == -1 || right_height == -1 || abs( left_height - right_height ) > 1 ) {
         return -1;
@@ -142,7 +158,7 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
         }
 
         // setup up node with children
-        populate_node( node_data, node_queue, is_head_processed, head );
+        populate_node_help( node_data, node_queue, is_head_processed, head );
     }
     this->head = head;
 }
@@ -152,21 +168,6 @@ BinaryTree::~BinaryTree() {
     this->clear();
 }
 
-void CopyTree( BinaryNode *copy, BinaryNode *original ) {
-    if ( original == nullptr || copy == nullptr) {
-        return;
-    }
-    
-    if ( original->left_child != nullptr  ) {
-        copy->left_child = new BinaryNode( original->left_child->val );
-        CopyTree( copy->left_child, original->left_child );
-    }
-
-    if ( original->right_child != nullptr  ) {
-        copy->right_child = new BinaryNode( original->right_child->val );
-        CopyTree( copy->right_child, original->right_child );
-    }
-}
 
 // function overload
 const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
@@ -174,7 +175,7 @@ const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
     if ( this->head != nullptr ) {
         head = new BinaryNode(0);
     }
-    CopyTree( this->head, rhs.head );
+    copy_tree_help( this->head, rhs.head );
     return *this;
 }
 
@@ -188,5 +189,5 @@ bool BinaryTree::is_full_binary() {
 }
 
 bool BinaryTree::is_balanced() {
-    return helper_balanced( this->head ) != -1;
+    return balanced_helper( this->head ) != -1;
 }
