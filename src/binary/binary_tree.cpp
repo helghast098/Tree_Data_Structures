@@ -59,7 +59,7 @@ void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode
     }
 }
 
-void copy_tree_help( BinaryNode *copy, BinaryNode *original ) {
+void copy_tree_help( BinaryNode* copy, BinaryNode* original ) {
     if ( original == nullptr || copy == nullptr) {
         return;
     }
@@ -75,7 +75,7 @@ void copy_tree_help( BinaryNode *copy, BinaryNode *original ) {
     }
 }
 
-void clear_help( BinaryNode *node ) {
+void clear_help( BinaryNode* node ) {
     if ( node == nullptr ) {
         return;
     }
@@ -88,7 +88,7 @@ void clear_help( BinaryNode *node ) {
     delete node;
 }
 
-bool full_binary_help( const BinaryNode *node ) {
+bool full_binary_help( const BinaryNode* node ) {
     if ( node == nullptr ) {
         return true;
     }
@@ -104,7 +104,7 @@ bool full_binary_help( const BinaryNode *node ) {
     return full_binary_help( node->left_child ) && full_binary_help( node->right_child );
 }
 
-int balanced_helper( BinaryNode * node) {
+int balanced_helper( BinaryNode* node) {
     if ( node == nullptr ) {
         return 0;
     }
@@ -119,6 +119,27 @@ int balanced_helper( BinaryNode * node) {
     return std::max( 1 + left_height, 1 + right_height );
 }
 
+void dfs_help( BinaryNode* node, std::vector<int>& dfs_v,  DFS_TYPE type ) {
+    if ( node == nullptr ) {
+        return;
+    }
+
+    if ( type == DFS_TYPE::PREORDER) {
+        dfs_v.push_back( node->val );
+    }
+
+    dfs_help( node->left_child, dfs_v, type );
+
+    if ( type == DFS_TYPE::INORDER) {
+        dfs_v.push_back( node->val );
+    }
+
+    dfs_help( node->right_child, dfs_v, type );
+
+    if ( type == DFS_TYPE::POSTORDER) {
+        dfs_v.push_back( node->val );
+    }
+}
 
 // constructor
 BinaryTree::BinaryTree( const std::string &node_data_str ) {
@@ -168,7 +189,6 @@ BinaryTree::~BinaryTree() {
     this->clear();
 }
 
-
 // function overload
 const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
     this->clear();
@@ -190,4 +210,14 @@ bool BinaryTree::is_full_binary() {
 
 bool BinaryTree::is_balanced() {
     return balanced_helper( this->head ) != -1;
+}
+
+std::vector<int> BinaryTree::dfs( DFS_TYPE type ) {
+    std::vector<int> dfs_v;
+
+    if ( this->head != nullptr ) {
+        dfs_help( this->head, dfs_v, type  );
+    }
+
+    return dfs_v;
 }
