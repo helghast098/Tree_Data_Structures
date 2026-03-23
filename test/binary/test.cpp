@@ -104,6 +104,38 @@ TEST( BinaryTree, IsBalanced ) {
     input.close();
 }
 
+TEST( BinaryTree, EqualityOperator ) {
+    std::ifstream input( data_dir + "/equals.txt" );
+    ASSERT_TRUE( input.good() ) << strerror( errno );
+    std::string line;
+
+    int test_case = 0;
+    std::string expected_result;
+    std::string nodes_str;
+    while( std::getline( input, line ) ) {
+        if ( !data_parser( line, test_case, expected_result, nodes_str ) ) {
+            continue;
+        }
+
+        bool expected_bool = expected_result[0] == '1';
+
+        size_t start_indx = expected_result.length() == 2 ? 1 : 2;
+        size_t length = expected_result.length() == 2 ? 0 : expected_result.length() - 3; // 3 removes the ending space and the expected val and space that follows it
+
+        BinaryTree tree1( expected_result.substr( start_indx , length ) );
+        BinaryTree tree2( nodes_str );
+
+        bool got = ( tree1 == tree2 );
+        std::cerr << "Got: " << got << std::endl;
+
+        ASSERT_EQ( expected_bool, got );
+        nodes_str = "";
+
+        std::cerr << "\n\n";
+    }
+    input.close();
+}
+
 TEST( BinaryTree, DFS ) {
     std::ifstream input(data_dir + "/dfs.txt");
     ASSERT_TRUE( input.good() ) << strerror( errno );
@@ -133,3 +165,4 @@ TEST( BinaryTree, DFS ) {
 
     
 }
+
