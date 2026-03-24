@@ -166,6 +166,35 @@ TEST( BinaryTree, DFS ) {
     
 }
 
+TEST( BinaryTree, BFS ) {
+    std::ifstream input(data_dir + "/bfs.txt");
+    ASSERT_TRUE( input.good() ) << strerror( errno );
+    std::string line;
+
+    int test_case = 0;
+    std::string expected_result;
+    std::string nodes_str;
+    while( std::getline( input, line ) ) {
+        if ( !data_parser( line, test_case, expected_result, nodes_str ) ) {
+            continue;
+        }
+
+        BinaryTree tree( nodes_str );
+
+        std::vector<int> expected_bfs = string_to_vec( expected_result ); // 2 is used to skip to first number in expected list
+        std::vector<int> got_bfs = tree.bfs();
+
+        ASSERT_EQ( expected_bfs, got_bfs );
+
+        nodes_str = "";
+
+        std::cerr << "\n\n";
+    }
+    input.close();
+
+    
+}
+
 TEST( BinaryTree,  AssignmentOperator ) {
     std::ifstream input( data_dir + "/balanced.txt" );
     ASSERT_TRUE( input.good() ) << strerror( errno );
