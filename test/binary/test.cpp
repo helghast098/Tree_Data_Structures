@@ -166,3 +166,27 @@ TEST( BinaryTree, DFS ) {
     
 }
 
+TEST( BinaryTree,  AssignmentOperator ) {
+    std::ifstream input( data_dir + "/balanced.txt" );
+    ASSERT_TRUE( input.good() ) << strerror( errno );
+    std::string line;
+
+    int test_case = 0;
+    std::string expected_result;
+    std::string nodes_str;
+    while( std::getline( input, line ) ) {
+        if ( !data_parser( line, test_case, expected_result, nodes_str ) ) {
+            continue;
+        }
+
+        BinaryTree tree( nodes_str );
+
+        BinaryTree copy = tree;
+
+        ASSERT_TRUE( tree == copy );
+        nodes_str = "";
+
+        std::cerr << "\n\n";
+    }
+    input.close();
+}
