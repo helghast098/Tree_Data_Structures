@@ -16,6 +16,7 @@ class BinaryTree {
 
         // Constructors
         BinaryTree() = default;
+        BinaryTree( const BinaryTree& other );
         BinaryTree( const std::string &node_data_str );
 
         // Destructor

@@ -156,7 +156,12 @@ bool equality_help( const BinaryNode* node1, const BinaryNode* node2 ) {
 
     return true;
 }
+
 // constructor
+BinaryTree::BinaryTree( const BinaryTree& other ) {
+    *this = other;
+}
+
 BinaryTree::BinaryTree( const std::string &node_data_str ) {
     BinaryNode *head = nullptr;
     bool is_head_processed = false;
@@ -231,8 +236,8 @@ std::vector<int> BinaryTree::dfs( DFS_TYPE type ) const{
 // function overload
 const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
     this->clear();
-    if ( this->head != nullptr ) {
-        head = new BinaryNode(0);
+    if ( rhs.head != nullptr ) {
+        this->head = new BinaryNode( rhs.head->val );
     }
     copy_tree_help( this->head, rhs.head );
     return *this;
