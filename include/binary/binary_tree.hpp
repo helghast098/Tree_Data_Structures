@@ -28,6 +28,7 @@ class BinaryTree {
         bool is_balanced() const; // checks if the grap is balanced
         std::vector<int> dfs( DFS_TYPE type = DFS_TYPE::PREORDER ) const; // returns dfs search vector
         std::vector<int> bfs() const;
+        int height() const;
 
         // operator overload
         const BinaryTree& operator=( const BinaryTree& rhs );

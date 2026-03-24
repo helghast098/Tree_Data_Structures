@@ -33,6 +33,7 @@ void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode
 
     while ( std::getline( nodes_val_str, node_val, ' ') ) {
         // setting head value
+
         if ( !is_head_processed ) {
             node->val = std::stoi( node_val );
             is_head_processed = true;
@@ -102,6 +103,14 @@ bool full_binary_help( const BinaryNode* node ) {
     }
 
     return full_binary_help( node->left_child ) && full_binary_help( node->right_child );
+}
+
+int height_helper( BinaryNode* node ) {
+    if ( node == nullptr ) {
+        return -1;
+    }
+
+    return 1 + std::max( height_helper( node->left_child ), height_helper( node->right_child ) );
 }
 
 int balanced_helper( BinaryNode* node) {
@@ -258,6 +267,10 @@ std::vector<int> BinaryTree::bfs() const {
     }
 
     return sol;
+}
+
+int BinaryTree::height() const {
+    return height_helper( this->head );
 }
 
 // function overload
