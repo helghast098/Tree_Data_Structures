@@ -219,3 +219,29 @@ TEST( BinaryTree,  AssignmentOperator ) {
     }
     input.close();
 }
+
+TEST( BinaryTree, Height ) {
+    std::ifstream input( data_dir + "/height.txt" );
+    ASSERT_TRUE( input.good() ) << strerror( errno );
+    std::string line;
+
+    int test_case = 0;
+    std::string expected_result;
+    std::string nodes_str;
+    while( std::getline( input, line ) ) {
+        if ( !data_parser( line, test_case, expected_result, nodes_str ) ) {
+            continue;
+        }
+
+        BinaryTree tree( nodes_str );
+
+        int got = tree.height();
+        std::cerr << "Got: " << got << std::endl;
+
+        ASSERT_EQ( std::stoi( expected_result ), got );
+        nodes_str = "";
+
+        std::cerr << "\n\n";
+    }
+    input.close();
+}
