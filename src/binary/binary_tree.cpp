@@ -215,15 +215,15 @@ void BinaryTree::clear() {
     this->head = nullptr;
 }
 
-bool BinaryTree::is_full_binary() const{
+bool BinaryTree::is_full_binary() const {
     return full_binary_help( this->head );
 }
 
-bool BinaryTree::is_balanced() const{
+bool BinaryTree::is_balanced() const {
     return balanced_helper( this->head ) != -1;
 }
 
-std::vector<int> BinaryTree::dfs( DFS_TYPE type ) const{
+std::vector<int> BinaryTree::dfs( DFS_TYPE type ) const {
     std::vector<int> dfs_v;
 
     if ( this->head != nullptr ) {
@@ -231,6 +231,33 @@ std::vector<int> BinaryTree::dfs( DFS_TYPE type ) const{
     }
 
     return dfs_v;
+}
+
+std::vector<int> BinaryTree::bfs() const {
+    std::queue<BinaryNode *> node_q;
+    std::vector<int> sol;
+
+    if ( this->head != nullptr ) {
+        node_q.push( this->head );
+    }
+
+    while( !node_q.empty() ) {
+        BinaryNode *node = node_q.front();
+        node_q.pop();
+        sol.push_back( node->val );
+
+        // insert left child
+        if ( node->left_child != nullptr ) {
+            node_q.push( node->left_child );
+        }
+
+        // insert right child
+        if ( node->right_child != nullptr ) {
+            node_q.push( node->right_child );
+        }
+    }
+
+    return sol;
 }
 
 // function overload
