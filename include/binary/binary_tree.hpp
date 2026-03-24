@@ -16,6 +16,7 @@ class BinaryTree {
 
         // Constructors
         BinaryTree() = default;
+        BinaryTree( const BinaryTree& other );
         BinaryTree( const std::string &node_data_str );
 
         // Destructor
@@ -23,10 +24,13 @@ class BinaryTree {
 
         // methods
         void clear();  // clears the graph
-        bool is_full_binary(); // checks if the graph is full binary
-        bool is_balanced(); // checks if the grap is balanced
+        bool is_full_binary() const; // checks if the graph is full binary
+        bool is_balanced() const; // checks if the grap is balanced
+        std::vector<int> dfs( DFS_TYPE type = DFS_TYPE::PREORDER ) const; // returns dfs search vector
+
+        // operator overload
         const BinaryTree& operator=( const BinaryTree& rhs );
-        std::vector<int> dfs( DFS_TYPE type = DFS_TYPE::PREORDER );
+        bool operator==( const BinaryTree& other ) const;
     private:
         BinaryNode *head = nullptr;
 };

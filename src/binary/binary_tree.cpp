@@ -141,7 +141,27 @@ void dfs_help( BinaryNode* node, std::vector<int>& dfs_v,  DFS_TYPE type ) {
     }
 }
 
+bool equality_help( const BinaryNode* node1, const BinaryNode* node2 ) {
+    if ( ( node1 == nullptr ) ^ ( node2 == nullptr ) ) {
+        return false;
+    }
+
+    if ( node1 == nullptr && node2 == nullptr ) {
+        return true;
+    }
+
+    if ( node1->val != node2->val ) {
+        return false;
+    }
+
+    return true;
+}
+
 // constructor
+BinaryTree::BinaryTree( const BinaryTree& other ) {
+    *this = other;
+}
+
 BinaryTree::BinaryTree( const std::string &node_data_str ) {
     BinaryNode *head = nullptr;
     bool is_head_processed = false;
@@ -189,30 +209,21 @@ BinaryTree::~BinaryTree() {
     this->clear();
 }
 
-// function overload
-const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
-    this->clear();
-    if ( this->head != nullptr ) {
-        head = new BinaryNode(0);
-    }
-    copy_tree_help( this->head, rhs.head );
-    return *this;
-}
-
+// methods
 void BinaryTree::clear() {
     clear_help( this->head );
     this->head = nullptr;
 }
 
-bool BinaryTree::is_full_binary() {
+bool BinaryTree::is_full_binary() const{
     return full_binary_help( this->head );
 }
 
-bool BinaryTree::is_balanced() {
+bool BinaryTree::is_balanced() const{
     return balanced_helper( this->head ) != -1;
 }
 
-std::vector<int> BinaryTree::dfs( DFS_TYPE type ) {
+std::vector<int> BinaryTree::dfs( DFS_TYPE type ) const{
     std::vector<int> dfs_v;
 
     if ( this->head != nullptr ) {
@@ -220,4 +231,18 @@ std::vector<int> BinaryTree::dfs( DFS_TYPE type ) {
     }
 
     return dfs_v;
+}
+
+// function overload
+const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
+    this->clear();
+    if ( rhs.head != nullptr ) {
+        this->head = new BinaryNode( rhs.head->val );
+    }
+    copy_tree_help( this->head, rhs.head );
+    return *this;
+}
+
+bool BinaryTree::operator==( const BinaryTree& other ) const {
+    return equality_help( this->head, other.head );
 }
