@@ -17,7 +17,7 @@ class TreeException: public std::exception {
     }
 };
 
-// helper functions
+// ========================= helper functions ========================= 
 
 // constructor
 void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& q, bool& is_head_processed, const BinaryNode *head) {
@@ -166,6 +166,20 @@ bool equality_help( const BinaryNode* node1, const BinaryNode* node2 ) {
     return true;
 }
 
+bool search_help( const BinaryNode* node, int val ) {
+    if ( node == nullptr  ) {
+        return false;
+    }
+
+    if ( node->val == val ) {
+        return true;
+    }
+
+    return search_help( node->left_child, val ) || search_help( node->right_child, val );
+}
+
+// =========================  Class Methods =========================
+
 // constructor
 BinaryTree::BinaryTree( const BinaryTree& other ) {
     *this = other;
@@ -271,6 +285,10 @@ std::vector<int> BinaryTree::bfs() const {
 
 int BinaryTree::height() const {
     return height_helper( this->head );
+}
+
+bool BinaryTree::search( int val ) const {
+    return search_help( this->head, val );
 }
 
 // function overload
