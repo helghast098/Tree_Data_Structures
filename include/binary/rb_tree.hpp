@@ -1,5 +1,5 @@
-#ifndef RED_BLACK
-#define RED_BLACK
+#ifndef RED_BLACK_HPP
+#define RED_BLACK_HPP
 
 #include "binary_tree.hpp"
 
