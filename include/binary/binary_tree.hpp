@@ -36,8 +36,11 @@ class BinaryTree {
         // operator overload
         const BinaryTree& operator=( const BinaryTree& rhs );
         bool operator==( const BinaryTree& other ) const;
-    private:
+        
+    protected:
         BinaryNode *head = nullptr;
+    
+    private:
 };
 
 #endif
