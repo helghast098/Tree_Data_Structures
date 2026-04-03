@@ -41,7 +41,7 @@ void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode
         }
 
         // left child
-        if ( node_to_set == 0 ) {
+        if ( node_to_set == 0 && node_val != "-" ) {
             node->left_child = new BinaryNode( std::stoi( node_val ), node );
             q.push( node->left_child );
         }
@@ -50,7 +50,7 @@ void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode
             node->right_child = new BinaryNode( std::stoi( node_val ), node );
             q.push( node->right_child );
         }
-        else {
+        else if ( node_to_set >= 2 ) {
             if ( node == head ) {
                 throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 3 values in first parse");
             }
@@ -66,12 +66,12 @@ void copy_tree_help( BinaryNode* copy, BinaryNode* original ) {
     }
     
     if ( original->left_child != nullptr  ) {
-        copy->left_child = new BinaryNode( original->left_child->val );
+        copy->left_child = new BinaryNode( original->left_child->val, copy );
         copy_tree_help( copy->left_child, original->left_child );
     }
 
     if ( original->right_child != nullptr  ) {
-        copy->right_child = new BinaryNode( original->right_child->val );
+        copy->right_child = new BinaryNode( original->right_child->val, copy );
         copy_tree_help( copy->right_child, original->right_child );
     }
 }
@@ -163,7 +163,7 @@ bool equality_help( const BinaryNode* node1, const BinaryNode* node2 ) {
         return false;
     }
 
-    return true;
+    return equality_help( node1->left_child, node2->left_child ) && equality_help( node1->right_child, node2->right_child );
 }
 
 bool search_help( const BinaryNode* node, int val ) {
