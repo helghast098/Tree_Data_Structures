@@ -20,9 +20,11 @@ class BinaryTree {
         BinaryTree( const std::string &node_data_str );
 
         // Destructor
-        ~BinaryTree();
+        virtual ~BinaryTree();
 
         // methods
+        virtual bool search( int val ) const;
+
         void clear();  // clears the graph
         bool is_full_binary() const; // checks if the graph is full binary
         bool is_balanced() const; // checks if the grap is balanced
@@ -30,11 +32,15 @@ class BinaryTree {
         std::vector<int> bfs() const;
         int height() const;
 
+
         // operator overload
         const BinaryTree& operator=( const BinaryTree& rhs );
         bool operator==( const BinaryTree& other ) const;
-    private:
+        
+    protected:
         BinaryNode *head = nullptr;
+    
+    private:
 };
 
 #endif

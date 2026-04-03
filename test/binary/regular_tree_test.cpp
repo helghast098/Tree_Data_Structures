@@ -8,7 +8,7 @@
 #include <sstream>
 #include <queue>
 
-const std::string data_dir = DATA_DIR;
+const std::string data_dir = DATA_DIR + std::string("/regular_tree");
 
 bool data_parser( const std::string &s,  int &test_case, std::string &expected_result, std::string &nodes_str ) {
     // getting test number
