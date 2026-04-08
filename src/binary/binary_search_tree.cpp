@@ -58,16 +58,16 @@ BinaryNode* find_least( BinaryNode* node ) {
 
 // class func.
 void BinarySearchTree::insert( int val ) {
-    if ( this->head == nullptr ) {
-        this->head = new BinaryNode( val );
+    if ( this->root == nullptr ) {
+        this->root = new BinaryNode( val );
     }
     else {
-        insert_help( this->head, val );
+        insert_help( this->root, val );
     }
 }
 
 bool BinarySearchTree::erase( int val ) {
-    BinaryNode* node = search_help( this->head, val );
+    BinaryNode* node = search_help( this->root, val );
     if ( node == nullptr ) {
         return false;
     }
@@ -111,7 +111,7 @@ bool BinarySearchTree::erase( int val ) {
 
     // if root node removed
     if ( parent == nullptr ) {
-        this->head = child;
+        this->root = child;
     }
     else if ( parent->left_child == node ) {
         parent->left_child = child;
@@ -125,5 +125,5 @@ bool BinarySearchTree::erase( int val ) {
 }
 
 bool BinarySearchTree::search( int val ) const {
-    return ( search_help( this->head, val ) != nullptr );
+    return ( search_help( this->root, val ) != nullptr );
 }

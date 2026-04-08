@@ -20,7 +20,7 @@ class TreeException: public std::exception {
 // ========================= helper functions ========================= 
 
 // constructor
-void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& q, bool& is_head_processed, const BinaryNode *head) {
+void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode *>& q, bool& is_root_processed, const BinaryNode *root) {
     if ( q.empty() ) {
         throw TreeException("BinaryTree::BinaryTree - No node found for entry");
     }
@@ -32,11 +32,11 @@ void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode
     int node_to_set = 0; // setting up left child first
 
     while ( std::getline( nodes_val_str, node_val, ' ') ) {
-        // setting head value
+        // setting root value
 
-        if ( !is_head_processed ) {
+        if ( !is_root_processed ) {
             node->val = std::stoi( node_val );
-            is_head_processed = true;
+            is_root_processed = true;
             continue;
         }
 
@@ -51,7 +51,7 @@ void populate_node_help( std::stringstream& nodes_val_str, std::queue<BinaryNode
             q.push( node->right_child );
         }
         else if ( node_to_set >= 2 ) {
-            if ( node == head ) {
+            if ( node == root ) {
                 throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 3 values in first parse");
             }
             throw TreeException("BinaryTree::BinaryTree - String initializer has bad form: More than 2 values between , , after first parse");
@@ -186,17 +186,17 @@ BinaryTree::BinaryTree( const BinaryTree& other ) {
 }
 
 BinaryTree::BinaryTree( const std::string &node_data_str ) {
-    BinaryNode *head = nullptr;
-    bool is_head_processed = false;
+    BinaryNode *root = nullptr;
+    bool is_root_processed = false;
 
     // getting node_data
     size_t node_start = 0; 
     std::queue< BinaryNode* > node_queue;
 
     while ( node_start < node_data_str.length() ) {
-        if ( !is_head_processed ) {
-            head = new BinaryNode(0);
-            node_queue.push( head );
+        if ( !is_root_processed ) {
+            root = new BinaryNode(0);
+            node_queue.push( root );
         }
 
         // parsing string for node values
@@ -222,9 +222,9 @@ BinaryTree::BinaryTree( const std::string &node_data_str ) {
         }
 
         // setup up node with children
-        populate_node_help( node_data, node_queue, is_head_processed, head );
+        populate_node_help( node_data, node_queue, is_root_processed, root );
     }
-    this->head = head;
+    this->root = root;
 }
 
 // deconstructor
@@ -234,23 +234,23 @@ BinaryTree::~BinaryTree() {
 
 // methods
 void BinaryTree::clear() {
-    clear_help( this->head );
-    this->head = nullptr;
+    clear_help( this->root );
+    this->root = nullptr;
 }
 
 bool BinaryTree::is_full_binary() const {
-    return full_binary_help( this->head );
+    return full_binary_help( this->root );
 }
 
 bool BinaryTree::is_balanced() const {
-    return balanced_helper( this->head ) != -1;
+    return balanced_helper( this->root ) != -1;
 }
 
 std::vector<int> BinaryTree::dfs( DFS_TYPE type ) const {
     std::vector<int> dfs_v;
 
-    if ( this->head != nullptr ) {
-        dfs_help( this->head, dfs_v, type  );
+    if ( this->root != nullptr ) {
+        dfs_help( this->root, dfs_v, type  );
     }
 
     return dfs_v;
@@ -260,8 +260,8 @@ std::vector<int> BinaryTree::bfs() const {
     std::queue<BinaryNode *> node_q;
     std::vector<int> sol;
 
-    if ( this->head != nullptr ) {
-        node_q.push( this->head );
+    if ( this->root != nullptr ) {
+        node_q.push( this->root );
     }
 
     while( !node_q.empty() ) {
@@ -284,23 +284,23 @@ std::vector<int> BinaryTree::bfs() const {
 }
 
 int BinaryTree::height() const {
-    return height_helper( this->head );
+    return height_helper( this->root );
 }
 
 bool BinaryTree::search( int val ) const {
-    return search_help( this->head, val );
+    return search_help( this->root, val );
 }
 
 // function overload
 const BinaryTree& BinaryTree::operator=( const BinaryTree &rhs ) {
     this->clear();
-    if ( rhs.head != nullptr ) {
-        this->head = new BinaryNode( rhs.head->val );
+    if ( rhs.root != nullptr ) {
+        this->root = new BinaryNode( rhs.root->val );
     }
-    copy_tree_help( this->head, rhs.head );
+    copy_tree_help( this->root, rhs.root );
     return *this;
 }
 
 bool BinaryTree::operator==( const BinaryTree& other ) const {
-    return equality_help( this->head, other.head );
+    return equality_help( this->root, other.root );
 }
